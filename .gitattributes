@@ -1,0 +1,4 @@
+# Archived guideline snapshots are SHA-256 bound in the manifest.
+# Preserve their original bytes across Windows and Unix checkouts.
+data/guidelines/agency/fannie_mae/verified/* -text -whitespace
+*.pdf binary

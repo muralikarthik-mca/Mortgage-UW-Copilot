@@ -65,6 +65,9 @@ def floating_assistant(context, record):
                 histories[job_scope].append({'role': 'assistant', 'text': result['answer'],
                     'html': answer_html(display), 'state': state,
                     'audit': {'loan_facts': result['facts'], 'retrieved_chunks': result['policies'],
+                              'retrieval_mode': result.get('retrieval_mode'),
+                              'retrieval_latency_ms': result.get('retrieval_latency_ms'),
+                              'candidate_rankings': result.get('retrieval_trace', []),
                               'citation_check_passed': result['citation_check_passed']}})
                 st.session_state.setdefault('assistant_results', {})[job_scope] = result
             except Exception as exc:

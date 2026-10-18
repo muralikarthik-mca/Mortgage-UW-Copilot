@@ -52,7 +52,6 @@ def main():
         expect(links.first).to_be_visible()
         assert links.first.get_attribute('target') == '_blank'
         assert 'noopener' in links.first.get_attribute('rel')
-        expect(dialog.get_by_role('status').filter(has_text='Insufficient evidence')).to_be_visible()
         page.screenshot(path=str(output / 'assistant-cited-desktop.png'))
         select = page.get_by_role('combobox', name='Select loan', exact=True)
         select.click()
@@ -66,6 +65,14 @@ def main():
         expect(dialog).to_be_visible()
         expect(dialog.get_by_text(question, exact=True)).to_be_visible()
         expect(dialog.get_by_text('Observed facts', exact=True)).to_be_visible()
+        # Missing loan evidence is an explicit, deterministic insufficient state.
+        select.click()
+        page.get_by_role('option', name='LN-10049', exact=True).click()
+        expect(dialog.locator('.uw-loan')).to_have_text('LN-10049 · SELF EMPLOYED')
+        field.fill('How old is the paystub?')
+        page.get_by_role('button', name='Send question', exact=True).click()
+        expect(dialog.get_by_text('no dated paystub is recorded', exact=False)).to_be_visible(timeout=15000)
+        expect(dialog.get_by_role('status').filter(has_text='Insufficient evidence')).to_be_visible()
         page.get_by_role('button', name='Close AI assistant', exact=True).click()
         # Persistent navigation works without a chat section appearing in the page.
         for name, title in [('Loans', 'Loan portfolio'), ('Guidelines', 'Guideline library'), ('RAG Evaluation', 'RAG evaluation')]:

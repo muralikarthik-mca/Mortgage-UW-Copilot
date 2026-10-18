@@ -32,6 +32,7 @@ def test_stale_events_rejected_and_navigation_preserves_context():
     with pytest.raises(ValueError, match='context changed'):
         validate_event(event, {**CONTEXT, 'loan_id': 'LN-10046'})
     assert context_id(CONTEXT) != context_id({**CONTEXT, 'corpus': 'training'})
+    assert context_id({**CONTEXT, 'rerank': False, 'retrieval_mode': 'dense'}) != context_id({**CONTEXT, 'rerank': False, 'retrieval_mode': 'hybrid'})
 
 
 def test_wrong_loan_result_is_withheld():

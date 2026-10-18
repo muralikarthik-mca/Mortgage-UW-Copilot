@@ -11,6 +11,7 @@ EXECUTOR = ThreadPoolExecutor(max_workers=2, thread_name_prefix='loan-review')
 
 def context_id(context):
     fields = {key: context[key] for key in ('loan_id', 'corpus', 'strategy', 'rerank')}
+    fields['retrieval_mode'] = context.get('retrieval_mode', 'hybrid_rerank' if context['rerank'] else 'dense')
     return hashlib.sha256(json.dumps(fields, sort_keys=True).encode()).hexdigest()[:24]
 
 

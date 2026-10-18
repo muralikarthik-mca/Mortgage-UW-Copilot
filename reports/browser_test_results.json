@@ -1,0 +1,17 @@
+{
+  "desktop_width": 400,
+  "mobile_bounds": {
+    "x": 8,
+    "y": 8,
+    "width": 374,
+    "height": 828
+  },
+  "layout_unchanged": true,
+  "open_close_escape_focus": true,
+  "minimize_preserves_history": true,
+  "loan_context_isolation": true,
+  "live_submission_and_citations": true,
+  "loading_error_insufficient_states": true,
+  "navigation": true,
+  "browser_errors": []
+}

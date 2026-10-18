@@ -23,14 +23,16 @@ with st.sidebar:
     source = st.selectbox('Guideline source', ['Fannie Mae supplied PDFs', 'Fictional training policies'], key='source_selection')
     corpus = 'fannie_mae' if source.startswith('Fannie') else 'training'
     with st.expander('Retrieval settings'):
-        strategy = st.radio('Chunking strategy', ['semantic', 'fixed'], key='strategy', help='Section/page-aware character windows; semantic uses larger windows.')
-        rerank = st.checkbox('BM25 reranking', value=True, key='use_rerank')
+        strategy = st.radio('Chunking strategy', ['semantic', 'fixed'], key='strategy', help='Semantic uses lexical topic-cohesion boundaries and keeps exceptions attached. Fixed uses 800-character windows with 150-character overlap.')
+        retrieval_label = st.selectbox('Retrieval approach', ['Dense vector', 'Hybrid dense + BM25', 'Hybrid + passage reranking'], key='retrieval_approach')
+        retrieval_mode = {'Hybrid + passage reranking': 'hybrid_rerank', 'Hybrid dense + BM25': 'hybrid', 'Dense vector': 'dense'}[retrieval_label]
+        rerank = retrieval_mode == 'hybrid_rerank'
     st.divider()
     st.html('<span class="uw-tag">SYNTHETIC TRAINING DATA</span><p class="uw-footnote">Local evidence support.<br>Final decisions require an authorized human.</p>')
 
 record = get_loan(loan_id)
 facts = evidence_review(record, corpus)
-context = {'loan_id': loan_id, 'corpus': corpus, 'strategy': strategy, 'rerank': rerank, 'view': view}
+context = {'loan_id': loan_id, 'corpus': corpus, 'strategy': strategy, 'rerank': rerank, 'retrieval_mode': retrieval_mode, 'view': view}
 received = sum(d['status'] == 'RECEIVED' for d in record['documents'])
 
 
@@ -92,7 +94,7 @@ if view in ('Dashboard', 'Loans'):
             for age in facts['paystub_ages']:
                 finding('Paystub timing requires context', f'Document {age["document_index"] + 1} is dated {age["age_days_at_application"]} days before application. Check the applicable guideline; no agency threshold is applied here.')
             if corpus == 'fannie_mae':
-                finding('Guideline snapshot quality', 'The supplied PDFs contain clipped passages. Confirm incomplete text against the linked official source.')
+                finding('Guideline source scope', 'Verified official topic-body snapshots are available. Original clipped PDFs are retained for audit; effective-date applicability and referenced topics still require review.')
             else:
                 finding('Fictional policy mode', 'Demo training policies are selected. Their rules must not be attributed to an agency.')
     with st.expander('Selected loan source record'):
@@ -100,7 +102,7 @@ if view in ('Dashboard', 'Loans'):
 elif view == 'Guidelines':
     st.title('Guideline library')
     st.html('<p class="uw-intro">Traceable source documents, version metadata, and local retrieval indexes.</p>')
-    st.html('<div class="uw-notice-banner">Agency snapshots and fictional training policies are indexed separately. Some PDF passages are clipped and require review of the official source.</div>')
+    st.html('<div class="uw-notice-banner">Agency topics and fictional policies remain separate. Verified topic-body PDFs preserve notes and exceptions; original clipped PDFs remain in the audit record. Topic revisions are not policy effective dates.</div>')
     c1, c2 = st.columns([2, 1])
     with c1:
         st.subheader(source)
@@ -109,7 +111,7 @@ elif view == 'Guidelines':
             for name, meta in manifest.items():
                 with st.container(border=True):
                     st.markdown(f'**{meta["section_id"]}** · {name.replace("_", " ").removesuffix(".pdf").title()}')
-                    st.caption(f'Topic revision {meta["version"]} · Snapshot completeness requires review')
+                    st.caption(f'Topic revision {meta["version"]} · Effective date not established · {meta.get("active_quality", "Completeness requires review")}')
                     st.link_button('Open official source', meta['source_url'])
                     with st.expander('Source metadata'):
                         st.json(meta)
@@ -119,7 +121,7 @@ elif view == 'Guidelines':
     with c2:
         with st.container(border=True):
             st.subheader('Index management')
-            st.caption(f'{strategy.title()} windows · BM25 {"enabled" if rerank else "disabled"}')
+            st.caption(f'{strategy.title()} chunking · {retrieval_label}')
             if st.button('Build / rebuild guideline index', key='build_index', type='primary', width='stretch'):
                 try:
                     with st.spinner('Extracting and embedding guideline evidence...'):
@@ -139,12 +141,16 @@ elif view == 'Guidelines':
                     st.error(f'Ollama is unavailable: {exc}')
 else:
     st.title('RAG evaluation')
-    st.html('<p class="uw-intro">Compare retrieval strategies against labeled fictional-policy questions.</p>')
-    st.info('Four labeled questions measure Recall@3. This is a small retrieval check, not an underwriting quality or eligibility score.')
+    st.html('<p class="uw-intro">Compare two chunking strategies and three retrieval approaches on labeled agency and fictional-policy questions.</p>')
+    st.info('30 labeled questions measure Precision@5, Recall@5, and retrieval latency. Answer source fidelity, citation correctness, relevance, and abstention use a separate documented rubric. These are not eligibility scores.')
+    from rag_evaluation import cached_report
+    measured_report = cached_report()
+    if measured_report and not st.session_state.get('evaluation_results'):
+        st.session_state['evaluation_results'] = measured_report['summary']
     if st.button('Run retrieval evaluation', key='run_evaluation', type='primary'):
         from evaluate import run_evaluation
         try:
-            with st.spinner('Building training indexes and evaluating retrieval...'):
+            with st.spinner('Loading valid measured results or building indexes and evaluating retrieval...'):
                 st.session_state['evaluation_results'] = run_evaluation()
         except Exception as exc:
             st.error(f'Evaluation failed: {exc}')
@@ -153,9 +159,20 @@ else:
     else:
         with st.container(border=True):
             st.subheader('No evaluation run yet')
-            st.caption('Run the comparison to see chunk counts and Recall@3 for semantic and fixed windows.')
+            st.caption('Run the comparison to measure dense, hybrid, and reranked retrieval with both chunking strategies.')
+    if measured_report:
+        st.caption('Measured ' + measured_report['measured_at'] + '. Matching cached results keep the demo responsive; use the CLI --force option for a fresh run.')
+        if measured_report.get('answers'):
+            st.subheader('Answer evaluation: representative subset')
+            st.dataframe([{'case': row['id'], **{k: v for k, v in row['metrics'].items() if isinstance(v, (int, float, bool))}} for row in measured_report['answers']], hide_index=True, width='stretch')
+            st.caption('Exact-source fidelity is not policy applicability. Answer support precision and abstention expose irrelevant or unsupported selections.')
+        with st.expander('Measured failure analysis and comparison report'):
+            st.markdown((ROOT / 'reports/rag_comparison.md').read_text(encoding='utf-8'))
+        with st.expander('Candidate scores before and after reranking'):
+            sample = st.selectbox('Measured query and configuration', range(len(measured_report['retrieval_results'])), format_func=lambda i: ' / '.join(str(measured_report['retrieval_results'][i][k]) for k in ('id', 'strategy', 'mode')))
+            st.dataframe(measured_report['retrieval_results'][sample]['candidate_trace'], hide_index=True, width='stretch')
     with st.expander('Evaluation method and command'):
-        st.write('Section/page-aware character windows with local Ollama embeddings and BM25 reranking. No semantic boundary detector or cross-encoder is used.')
-        st.code('.\\.venv314\\Scripts\\python.exe evaluate.py', language='powershell')
+        st.write('Semantic = TextTiling-inspired lexical cohesion, with exception attachment. Fixed = character-window baseline. Retrieval = dense, dense/BM25 union, or hybrid plus a lexical passage reranker. The reranker is not a cross-encoder. See reports/evaluation_rubric.md for exact metric definitions.')
+        st.code('.\\.venv314\\Scripts\\python.exe evaluate.py --force --answers', language='powershell')
 
 floating_assistant(context, record)

@@ -1,0 +1,80 @@
+{
+  "audited_at": "2026-10-18T21:55:40.525431+00:00",
+  "sources": [
+    {
+      "file": "base_income.pdf",
+      "original_sha256": "9a91914e9b988d18fe0c36ea4e27421d5fc324d8034acf24085ee4d4d7908cae",
+      "original_quality": "clipped/incomplete browser-print snapshot",
+      "original_body_token_coverage": 0.8584905660377359,
+      "readable_original_revision": "03/04/2026",
+      "verified_topic_revision": "03/04/2026",
+      "effective_date": null,
+      "outdated_status": "no revision change detected at verification",
+      "active_file": "verified/base_income.pdf",
+      "active_sha256": "33cf190947af733a08d5ece4cd7fc580b89d932028e0e029cf636d52ce1386fd",
+      "active_quality": "complete_topic_body",
+      "active_body_token_coverage": 1.0,
+      "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.3-01/base-income",
+      "verified_at": "2026-10-18T21:43:11.060922+00:00",
+      "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review."
+    },
+    {
+      "file": "employment_documentation.pdf",
+      "original_sha256": "7a289ee0ed7d83c6868980f5ffe6dec3e9eedccc5d3feab2cdeb940775344c20",
+      "original_quality": "clipped/incomplete browser-print snapshot",
+      "original_body_token_coverage": 0.8318485523385301,
+      "readable_original_revision": null,
+      "verified_topic_revision": "03/04/2026",
+      "effective_date": null,
+      "outdated_status": "original heading incomplete or different; rely on verified topic revision",
+      "active_file": "verified/employment_documentation.pdf",
+      "active_sha256": "55af16db506cba1b2185b7c6d3382c2a5b21e5975ca56c72ebd273e3ebc47823",
+      "active_quality": "complete_topic_body",
+      "active_body_token_coverage": 1.0,
+      "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.2-01/standards-employment-and-income-documentation",
+      "verified_at": "2026-10-18T21:43:11.753981+00:00",
+      "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review."
+    },
+    {
+      "file": "general_income.pdf",
+      "original_sha256": "fbb406522844cc12e2ceb0adee6dc060f14d1d7a95f0072cc13af5c1582f16f1",
+      "original_quality": "clipped/incomplete browser-print snapshot",
+      "original_body_token_coverage": 0.8131416837782341,
+      "readable_original_revision": "10/07/2026",
+      "verified_topic_revision": "10/07/2026",
+      "effective_date": null,
+      "outdated_status": "no revision change detected at verification",
+      "active_file": "verified/general_income.pdf",
+      "active_sha256": "db2a126bda5001d2789ccd5871d5fd77d3eb1ce952eea7aef15340ca67b822ec",
+      "active_quality": "complete_topic_body",
+      "active_body_token_coverage": 1.0,
+      "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.1-01/general-income-information",
+      "verified_at": "2026-10-18T21:43:12.393762+00:00",
+      "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review."
+    },
+    {
+      "file": "variable_income.pdf",
+      "original_sha256": "fc1aa1d48e5f5511b7b063bfdf9e159b126edc168b832ad5a19b820d1cbe98a9",
+      "original_quality": "clipped/incomplete browser-print snapshot",
+      "original_body_token_coverage": 0.7816901408450705,
+      "readable_original_revision": "03/04/2026",
+      "verified_topic_revision": "03/04/2026",
+      "effective_date": null,
+      "outdated_status": "no revision change detected at verification",
+      "active_file": "verified/variable_income.pdf",
+      "active_sha256": "e342c7ef4d127340cedb2712d398bbfca66820f024eaedae09b81377e41341d7",
+      "active_quality": "complete_topic_body",
+      "active_body_token_coverage": 1.0,
+      "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.3-02/bonus-commission-overtime-and-tip-income",
+      "verified_at": "2026-10-18T21:43:13.074215+00:00",
+      "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review."
+    }
+  ],
+  "method": "Archived original PDF vs complete official #topic_content; original HTML and article HTML hashes retained. Width-safe active PDFs must cover 100% of body tokens. Token coverage does not establish table reading order, legal completeness of the entire guide, or effective-date applicability.",
+  "coverage_gaps": [
+    "Multiple-job agency topic",
+    "Self-employment calculation topics",
+    "Detailed referenced VOE and DU validation topics",
+    "FHA and other agencies"
+  ]
+}

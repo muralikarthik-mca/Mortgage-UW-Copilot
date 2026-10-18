@@ -13,6 +13,8 @@ Use the existing Python 3.14 environment explicitly (also configured in `.vscode
 
 Ollama must be running locally with `gemma3:1b` and `nomic-embed-text` pulled. `.env` is optional; defaults match `.env.example`. Configure `OLLAMA_BASE_URL`, `OLLAMA_CHAT_MODEL`, and `OLLAMA_EMBED_MODEL` there to override defaults. Cloud APIs are not used.
 
+The default URL is `http://127.0.0.1:11434`, which avoids the observed Windows IPv6 fallback delay with `localhost`. Explicit environment overrides are still respected.
+
 Use the persistent left navigation to open **Dashboard**, **Loans**, **Guidelines**, or **RAG Evaluation**. Select the active loan and guideline source in the sidebar. Open **Guidelines** and click **Build / rebuild guideline index** for each source/strategy you want to use.
 
 The main workspace shows loan summary cards, income details, document inventory, and preliminary findings. Open the **AI assistant** button at the bottom right to ask **Review the income documentation and identify outstanding items.** The 400px desktop panel floats above the page; on narrow screens it fills almost the whole viewport. Close it with the close control, launcher, or Escape. Keyboard focus enters the question field on open and returns to the launcher on close; mobile keyboard focus stays inside the panel.
@@ -27,13 +29,33 @@ Reviews run in background workers, so minimizing does not cancel them. Loading, 
 
 `data/guidelines/TRAINING_ONLY_POLICIES.md` contains seven explicitly fictional TR-INC sections. Its 60-day recency flag is confined to training mode and is never used as an agency rule.
 
-`data/guidelines/agency/fannie_mae/` contains four original browser-print PDFs. `manifest.json` preserves source URLs, topic identifiers, verified topic revision dates, hashes, and quality notes. Some text is clipped at the right edge. The original files are retained unchanged; the app marks this evidence incomplete and links the official pages. Topic revision dates are not asserted to be effective dates for a particular loan. The supplied snapshots do not provide comprehensive agency coverage (including self-employment and multiple-job guidance).
+`data/guidelines/agency/fannie_mae/` retains the four original clipped browser-print PDFs unchanged. Its `verified/` directory contains archived official HTML, isolated complete topic bodies, and width-safe replacement PDFs. `manifest.json` binds originals, raw HTML, article HTML, and active PDFs by SHA-256. All four active PDFs passed 100% body-token coverage against their official topic bodies, including tables, notes, alternatives, and exceptions. Token coverage does not establish table reading order or completeness of the entire Selling Guide. Topic revision dates are stored separately from `effective_date: null`; no effective date is invented. `reports/source_quality.json` documents clipping, readable original revisions, verified revisions, missing-topic coverage, and source verification times.
 
-`core.py` extracts each PDF page, keeps it under its topic identifier, and splits within page/section boundaries. The semantic option is a larger character-window baseline, not semantic boundary detection. Each chunk carries page number, source path/URL, topic revision, PDF creation timestamp, content hash, and quality warning. Manifest mismatches fail ingestion. New PDFs require extractable text, a topic heading, and an official source URL in the text; review their completeness and add a hash-bound manifest entry before relying on them.
+`core.py` extracts each active PDF page under its topic identifier. `chunking.py` offers two genuinely different boundary algorithms:
 
-Ollama embeddings and NumPy cosine search use local JSON indexes under `.indexes/`; optional BM25 reranking combines semantic and lexical ranks. Indexes rebuild atomically and reject changes to source content, metadata, or embedding model. No vector database or workflow server is needed. `build_graph().invoke(...)` preserves the starter interface with a synchronous retrieval/generation workflow.
+- **Fixed baseline:** 800-character windows, 150-character overlap. It can split sentences or conditions; it preserves all source characters through overlap.
+- **Semantic:** deterministic [TextTiling-inspired](https://aclanthology.org/J97-1003/) segmentation based on TF-IDF lexical cohesion between adjacent two-sentence windows, paragraph boundaries, and topic-cohesion drops. It uses meaning-related topic vocabulary rather than larger character windows. Notes, exceptions, alternative paths, and lists following a colon stay with preceding text on the same page. It does not call Ollama during segmentation or claim to be an embedding-based segmenter. Page-spanning conditions and complex tables still require adjacent-page review.
 
-The small chat model selects guideline chunk IDs through structured output. The app accepts only IDs present in the retrieved evidence and quotes their original text directly; it never displays model-written factual claims or reconstructed passages. Loan observations are rendered directly from JSON with `[loan:LOAN_ID]` citations. Selected passages carry section citations, and full retrieved excerpts and metadata are appended independently. If no valid selection is returned, the app reports insufficient evidence. This bounded, extractive answer avoids exposing the small model's unreliable free-form factual claims. It does not infer eligibility or establish that a selected passage applies to the loan. Human review is required, especially for incomplete PDF passages. Source text and questions are treated as untrusted data.
+Every chunk preserves original text, section ID, page reference, character offsets, URL, revision, unknown effective date, source hashes, quality warnings, boundary reason/cohesion, and adjacent chunk IDs. Semantic text is not paraphrased or deduplicated. Tests verify topic-driven boundary changes, lossless coverage, exception attachment, and distinct real-corpus boundaries. Manifest mismatches fail ingestion. Refreshing official sources is an explicit maintenance step, never a startup side effect:
+
+```powershell
+.\.venv314\Scripts\python.exe refresh_sources.py
+.\.venv314\Scripts\python.exe audit_sources.py
+```
+
+Refreshing requires optional browser dependencies and installed Edge. It retains originals, verifies the official topic identity, archives provenance, and refuses to update the manifest if printed body-token coverage is below 100%. Existing readable PDF revisions matched the checked online topics; the clipped employment-documentation heading cannot establish its original revision independently. Verification is a dated snapshot, not a guarantee of future currency.
+
+Ollama `nomic-embed-text` embeddings and NumPy search still use separate local JSON indexes for each corpus/strategy under `.indexes/`; no ChromaDB or new service was added. Nomic document/query task prefixes are used. Schema/chunking/source-signature validation invalidates old indexes, so rebuild after this update. The retrieval dropdown offers:
+
+1. **Dense vector:** cosine ranking from a dense candidate pool.
+2. **Hybrid dense + BM25:** union of independently retrieved dense and BM25 candidates, fused using reciprocal ranks. BM25 can introduce candidates outside the dense pool.
+3. **Hybrid + passage reranking:** the hybrid candidate pool reordered by an explicit query-passage lexical scorer using best-sentence term coverage, query bigrams, and whole-passage coverage. This is not a learned cross-encoder or an underwriting confidence score.
+
+All candidate IDs, raw dense/BM25 scores, independent ranks, RRF scores, passage scores, and before/after ranks are available in the assistant audit and evaluation dashboard. Indexes rebuild atomically and reject changed source content, metadata, chunking version, or embedding model name. The `build_graph().invoke(...)` interface is preserved; it remains a synchronous Python workflow, not a LangGraph dependency. Simple paystub-age questions use direct loan-date calculation and a short cited answer, without RAG or Ollama.
+
+The UI defaults to semantic chunking with dense retrieval because it had the highest measured Recall@5 on this curated set. Hybrid and passage reranking remain explicit options; the measured report retains their regressions rather than assuming that more ranking stages are better. This is a demo-specific choice, not evidence of general superiority.
+
+The small chat model selects short numbered evidence options through structured output; Python resolves them to validated original chunk IDs. Retrieval returns five passages for the source audit. Answer selection conservatively uses the highest-ranked passage, or the first two for explicitly comparative questions mentioning sections, topics, both, or comparison. This limits unrelated lower-ranked selections; the model can still abstain. It can miss answers requiring more passages or implicit comparisons. The app quotes original source text with section citations and renders loan observations directly from JSON with `[loan:LOAN_ID]` citations. Conservative corpus-scope guards abstain for recognized missing topics or vague first-turn questions; they describe available documents, not underwriting rules. No supporting selection produces an insufficient-evidence response. Human review remains required.
 
 ## Verification
 
@@ -51,6 +73,35 @@ For browser verification, install the optional development dependency and run ag
 .\.venv314\Scripts\python.exe verify_ui.py
 ```
 
-Tests cover synthetic records, separation of fictional rules, PDF provenance, changed-source rejection, index lifecycle, citation checks, Streamlit loan selection, cross-loan denial, stale events, and safe answer markup. `evaluate.py` measures Recall@3 against four labeled fictional-policy questions using live Ollama embeddings; the same function powers the RAG Evaluation page. `smoke_workflow.py` exercises rendering, index building, and the loan-scoped backend with live Ollama. `verify_ui.py` exercises the real browser UI, including open/close, focus, Escape, drafts, submission while minimized, citations, history restoration, loan switching, all navigation views, and mobile dimensions/keyboard behavior. Verification evidence and screenshots are saved locally under `artifacts/`.
+The 31 baseline tests passed before changes; the checkpoint tag is `checkpoint/pre-rag-improvements-20261018`. Existing tests are retained, with additional tests for semantic boundaries, exception preservation, hybrid candidate expansion, reranking traces, complete-source provenance, and metric/rubric behavior. `smoke_workflow.py` checks rendering, index building, and the live loan-scoped backend. `verify_ui.py` checks the actual desktop/mobile browser UI, context isolation, source links, insufficient evidence, history, focus, and evaluation navigation. Runtime screenshots remain under ignored `artifacts/`.
+
+## Measured RAG evaluation
+
+`data/evaluation/questions.json` contains 30 labeled questions: salary, employment documentation, bonus/overtime, multiple income sources, exceptions, multi-section questions, ambiguity, and absent topics. Labels are source-text anchors scoped to section IDs. They are not invented agency requirements.
+
+```powershell
+# Return a matching cached measurement or perform the six-way retrieval benchmark:
+.\.venv314\Scripts\python.exe evaluate.py
+# Force fresh retrieval measurements and eight representative live answer checks:
+.\.venv314\Scripts\python.exe evaluate.py --force --answers
+```
+
+The comparison covers two chunking algorithms × three retrieval modes. It records chunk-level Precision@5, Recall@5, and measured end-to-end retrieval latency. Recall is undefined for unanswerable questions and excluded from its macro average. Answer checks measure exact-source faithfulness, citation correctness, independent evidence relevance, multi-section coverage, and abstention using `reports/evaluation_rubric.md`. Source fidelity is deliberately narrower than human semantic entailment; an irrelevant exact quote can score perfectly on fidelity while failing relevance. Eight pipeline answer cases use semantic + dense, matching the deployed default; the report distinguishes actual Ollama calls from scope-guard abstention. The original measured failures are retained in `reports/initial_rag_comparison.*`. Scope guards and a narrower ranked answer window address observed development-set failures; these are not held-out validation results.
+
+Final verification: **48 tests passed**, with desktop/mobile browser checks passing. Semantic + dense measured Precision@5 **0.207**, Recall@5 **1.000**, and median retrieval latency **125.3 ms** across 30 questions. Five answerable samples achieved support precision and required-section coverage of 1.0; three ambiguous/absent-topic samples correctly abstained. These eight answer checks do not certify unseen questions. `reports/answer_relevance_probe.json` records the five-case check performed before the final benchmark.
+
+Read `reports/rag_comparison.md` for measured results and failure analysis; its companion JSON contains raw scores, candidate traces, and actual answer outputs. The evaluation dashboard loads matching measured results quickly and exposes the report, answer rubric scores, and before/after candidate ranks. Fresh benchmarks require Ollama and can take several minutes. The local JSON index is sufficient for this small corpus; no infrastructure migration is justified.
+
+## Five-minute demo
+
+1. Start Ollama and the app with `.venv314`. Build the selected index in Guidelines if needed; a benchmark builds all four indexes.
+2. Select LN-10046 and ask **How old is the paystub?** Confirm the short, loan-cited 151-day calculation.
+3. Ask **What does the documentation section say about the date of the most recent paystub relative to initial application?** Open the official section citation and evidence/ranking audit.
+4. Try requesting another loan ID; the assistant rejects it. Switch to LN-10049 and ask paystub age to show an explicit missing-evidence response.
+5. Open RAG Evaluation. Compare the six measured configurations, candidate rank changes, and the documented answer failures. Cached measurements are labeled with their actual timestamp.
+
+## Remaining limitations
+
+The corpus covers only four official topics and seven fictional sections. Missing multiple-job, self-employment-calculation, FHA, and referenced topics require more verified sources. Effective-date applicability is unknown. Lexical semantic segmentation is not an embedding model; page boundaries and tables can separate conditions. The passage reranker is not a cross-encoder. The small chat model can select irrelevant evidence or fail to abstain. Gold labels are curated, overlap affects chunk-level recall denominators, and there is no held-out evaluation or human policy-applicability scoring. Latencies are single-run and hardware/load-dependent. Model names are validated, but silent replacement under the same name requires a manual rebuild; measured model digests are recorded. The demo has selected-loan isolation but no production authentication or credit-decision capability.
 
 The imported starter had misplaced contents in `requirements.txt`, `core.py`, `evaluate.py`, and `README.md`; these files were repaired. The original loan JSON, fictional policy file, and PDFs were retained. The root `test_core.py` is a misplaced duplicate loan list; pytest uses the actual tests under `tests/`. Importlib mode avoids the duplicate test module name collision.

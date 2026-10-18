@@ -8,3 +8,4 @@ __pycache__/
 .indexes/
 *.log
 artifacts/
+data/guidelines/agency/fannie_mae/.refresh-*/

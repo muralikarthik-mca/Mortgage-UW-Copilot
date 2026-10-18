@@ -3,32 +3,104 @@
     "section_id": "B3-3.3-01",
     "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.3-01/base-income",
     "version": "03/04/2026",
-    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "version_basis": "Official topic heading; not a policy effective date",
     "sha256": "9a91914e9b988d18fe0c36ea4e27421d5fc324d8034acf24085ee4d4d7908cae",
-    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+    "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review.",
+    "active_file": "verified/base_income.pdf",
+    "active_sha256": "33cf190947af733a08d5ece4cd7fc580b89d932028e0e029cf636d52ce1386fd",
+    "active_quality": "complete_topic_body",
+    "topic_revision_date": "03/04/2026",
+    "effective_date": null,
+    "verified_at": "2026-10-18T21:43:11.060922+00:00",
+    "raw_html_file": "verified/base_income.source.html",
+    "raw_html_sha256": "53f50ce6eff55511cb3137d56a7dc8b71870a7c91c03cf593a6327141e7140bb",
+    "article_html_file": "verified/base_income.article.html",
+    "article_html_sha256": "0bbe2c65415e1c528ba44743a1cd93dc5c174a176349c1f46a3389aeb366ba3a",
+    "body_token_coverage": 1.0,
+    "missing_body_tokens": {},
+    "active_page_count": 3,
+    "transformations": [
+      "Removed 3 duplicate PDF-only cross-reference links",
+      "Kept complete #topic_content including notes, tables, exceptions, and announcements",
+      "Rendered width-safe PDF from official body; no source sentences rewritten"
+    ]
   },
   "employment_documentation.pdf": {
     "section_id": "B3-3.2-01",
     "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.2-01/standards-employment-and-income-documentation",
     "version": "03/04/2026",
-    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "version_basis": "Official topic heading; not a policy effective date",
     "sha256": "7a289ee0ed7d83c6868980f5ffe6dec3e9eedccc5d3feab2cdeb940775344c20",
-    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+    "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review.",
+    "active_file": "verified/employment_documentation.pdf",
+    "active_sha256": "55af16db506cba1b2185b7c6d3382c2a5b21e5975ca56c72ebd273e3ebc47823",
+    "active_quality": "complete_topic_body",
+    "topic_revision_date": "03/04/2026",
+    "effective_date": null,
+    "verified_at": "2026-10-18T21:43:11.753981+00:00",
+    "raw_html_file": "verified/employment_documentation.source.html",
+    "raw_html_sha256": "06bf9a25f675bb40daa5871bf704606ad834e129a0bc1af01a6ddae0f458b363",
+    "article_html_file": "verified/employment_documentation.article.html",
+    "article_html_sha256": "2967220024ca04f39871dd710a77595e151b6d1a2502259b223ed5ec6037a6c8",
+    "body_token_coverage": 1.0,
+    "missing_body_tokens": {},
+    "active_page_count": 2,
+    "transformations": [
+      "Removed 7 duplicate PDF-only cross-reference links",
+      "Kept complete #topic_content including notes, tables, exceptions, and announcements",
+      "Rendered width-safe PDF from official body; no source sentences rewritten"
+    ]
   },
   "general_income.pdf": {
     "section_id": "B3-3.1-01",
     "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.1-01/general-income-information",
     "version": "10/07/2026",
-    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "version_basis": "Official topic heading; not a policy effective date",
     "sha256": "fbb406522844cc12e2ceb0adee6dc060f14d1d7a95f0072cc13af5c1582f16f1",
-    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+    "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review.",
+    "active_file": "verified/general_income.pdf",
+    "active_sha256": "db2a126bda5001d2789ccd5871d5fd77d3eb1ce952eea7aef15340ca67b822ec",
+    "active_quality": "complete_topic_body",
+    "topic_revision_date": "10/07/2026",
+    "effective_date": null,
+    "verified_at": "2026-10-18T21:43:12.393762+00:00",
+    "raw_html_file": "verified/general_income.source.html",
+    "raw_html_sha256": "26b441e22a872c3d490d5079a7af2d55caec5e4ead63549d423050f1d1377891",
+    "article_html_file": "verified/general_income.article.html",
+    "article_html_sha256": "37fd2a0cca0075532890608ec6bb455fed8fc79f350a7fbd698008faf24ab11b",
+    "body_token_coverage": 1.0,
+    "missing_body_tokens": {},
+    "active_page_count": 2,
+    "transformations": [
+      "Removed 4 duplicate PDF-only cross-reference links",
+      "Kept complete #topic_content including notes, tables, exceptions, and announcements",
+      "Rendered width-safe PDF from official body; no source sentences rewritten"
+    ]
   },
   "variable_income.pdf": {
     "section_id": "B3-3.3-02",
     "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.3-02/bonus-commission-overtime-and-tip-income",
     "version": "03/04/2026",
-    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "version_basis": "Official topic heading; not a policy effective date",
     "sha256": "fc1aa1d48e5f5511b7b063bfdf9e159b126edc168b832ad5a19b820d1cbe98a9",
-    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+    "quality_warning": "Original browser-print PDF clipped; retained unchanged for audit. Active PDF is a verified complete topic-body rendering, not the complete Selling Guide. Referenced topics and effective-date applicability require separate review.",
+    "active_file": "verified/variable_income.pdf",
+    "active_sha256": "e342c7ef4d127340cedb2712d398bbfca66820f024eaedae09b81377e41341d7",
+    "active_quality": "complete_topic_body",
+    "topic_revision_date": "03/04/2026",
+    "effective_date": null,
+    "verified_at": "2026-10-18T21:43:13.074215+00:00",
+    "raw_html_file": "verified/variable_income.source.html",
+    "raw_html_sha256": "040fbca0e83171ae99da6d6b215fa1260cab57c745e055bc72f02a2066a51bad",
+    "article_html_file": "verified/variable_income.article.html",
+    "article_html_sha256": "04ae59e30306c9738ce9fad0f4d55e67059c6d35c6ac76ecca5040656d485e5c",
+    "body_token_coverage": 1.0,
+    "missing_body_tokens": {},
+    "active_page_count": 1,
+    "transformations": [
+      "Removed 1 duplicate PDF-only cross-reference links",
+      "Kept complete #topic_content including notes, tables, exceptions, and announcements",
+      "Rendered width-safe PDF from official body; no source sentences rewritten"
+    ]
   }
 }
