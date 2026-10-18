@@ -1,0 +1,50 @@
+:host { font-family: Inter, "Segoe UI", sans-serif; color: #172b43; }
+* { box-sizing: border-box; }
+button, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, a:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 3px solid #5a9af0; outline-offset: 3px; }
+.uw-launcher { position: fixed; z-index: 1000001; right: 28px; bottom: 24px; height: 54px; border: 0; border-radius: 28px; padding: 0 21px; background: #173c68; color: white; display: flex; gap: 10px; align-items: center; box-shadow: 0 6px 24px #173c6838; font-weight: 650; }
+.uw-launcher:hover { background: #235185; }
+.uw-launcher svg { width: 22px; height: 22px; }
+.uw-panel { position: fixed; z-index: 1000000; right: 28px; bottom: 92px; width: 400px; height: min(690px, calc(100dvh - 120px)); max-height: calc(100dvh - 120px); min-height: 230px; background: #fff; border: 1px solid #dbe3ee; border-radius: 18px; box-shadow: 0 18px 70px #142a4933; display: flex; flex-direction: column; overflow: hidden; }
+.uw-panel[hidden] { display: none; }
+.uw-header { padding: 18px 18px 14px; display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e8edf3; flex-shrink: 0; }
+.uw-header h2 { font-size: 16px; line-height: 1.4; margin: 0 0 5px; font-weight: 700; }
+.uw-header p { font-size: 12px; color: #52647c; margin: 0; }
+.uw-close { border: 0; border-radius: 8px; color: #53627a; background: #f1f4f8; width: 34px; height: 34px; font-size: 24px; line-height: 1; }
+.uw-context { padding: 10px 18px; background: #f5f8fc; color: #52647c; font-size: 11px; line-height: 1.5; border-bottom: 1px solid #e8edf3; }
+.uw-log { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 18px; scroll-behavior: smooth; }
+.uw-empty { padding-top: 22px; }
+.uw-empty h3 { font-size: 22px; letter-spacing: -.5px; margin: 0 0 10px; }
+.uw-empty p { font-size: 13px; color: #5c6c81; line-height: 1.65; margin-bottom: 22px; }
+.uw-suggestion { display: block; text-align: left; width: 100%; padding: 13px; margin: 8px 0; border: 1px solid #dce5ef; background: #fff; border-radius: 10px; color: #24496f; font-size: 12px; line-height: 1.5; }
+.uw-suggestion:hover { background: #f0f5fc; border-color: #97b4d8; }
+.uw-message { margin-bottom: 18px; font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+.uw-message-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #62738a; margin-bottom: 6px; }
+.uw-message.user .uw-body { padding: 12px 14px; background: #edf3fb; border-radius: 12px 12px 2px 12px; }
+.uw-message p { margin: 7px 0; }
+.uw-message blockquote { padding: 6px 10px; margin: 9px 0; border-left: 3px solid #bdcfe5; color: #475a71; background: #f8fafc; font-size: 12px; }
+.uw-message a { color: #1659a4; text-decoration: underline; text-underline-offset: 2px; }
+.uw-message details { margin: 12px 0; border: 1px solid #dfe7ef; border-radius: 8px; padding: 10px; }
+.uw-message summary { cursor: pointer; font-size: 12px; font-weight: 650; color: #365b80; }
+.uw-message pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; line-height: 1.5; max-height: 260px; overflow-y: auto; }
+.uw-status { margin-bottom: 12px; border-radius: 9px; padding: 10px 12px; font-size: 12px; line-height: 1.5; }
+.uw-status.error { background: #fff0ee; color: #9b3025; }
+.uw-status.insufficient { background: #fff8e8; color: #725720; }
+.uw-status.loading { background: #edf4ff; color: #28578d; }
+.uw-pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; margin-right: 7px; animation: pulse 1.3s infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+.uw-footer { border-top: 1px solid #e4eaf1; background: white; padding: 12px 16px 14px; flex-shrink: 0; }
+.uw-form { display: flex; align-items: flex-end; gap: 8px; }
+.uw-input { resize: none; min-height: 44px; max-height: 100px; width: 100%; border: 1px solid #ccd8e5; border-radius: 10px; padding: 11px; font-size: 13px; color: #1d344d; }
+.uw-send { height: 44px; width: 44px; flex-shrink: 0; border: 0; border-radius: 10px; background: #173c68; color: white; font-size: 20px; }
+.uw-send:disabled { background: #9dadbf; cursor: wait; }
+.uw-disclaimer { font-size: 10px; color: #69798c; margin: 8px 0 0; line-height: 1.5; }
+.uw-notice { min-height: 16px; font-size: 11px; color: #9b3025; margin-top: 4px; }
+@media (max-width: 600px) {
+ .uw-panel { inset: 8px; width: auto; height: calc(100dvh - 16px); max-height: calc(100dvh - 16px); border-radius: 14px; z-index: 1000002; padding-bottom: env(safe-area-inset-bottom); }
+ .uw-launcher { right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); height: 50px; padding: 0 17px; }
+ .uw-log { padding: 16px; }
+ .uw-input { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; scroll-behavior: auto !important; } }

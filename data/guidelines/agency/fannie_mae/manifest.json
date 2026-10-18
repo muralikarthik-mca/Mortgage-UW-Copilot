@@ -1,0 +1,34 @@
+{
+  "base_income.pdf": {
+    "section_id": "B3-3.3-01",
+    "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.3-01/base-income",
+    "version": "03/04/2026",
+    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "sha256": "9a91914e9b988d18fe0c36ea4e27421d5fc324d8034acf24085ee4d4d7908cae",
+    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+  },
+  "employment_documentation.pdf": {
+    "section_id": "B3-3.2-01",
+    "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.2-01/standards-employment-and-income-documentation",
+    "version": "03/04/2026",
+    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "sha256": "7a289ee0ed7d83c6868980f5ffe6dec3e9eedccc5d3feab2cdeb940775344c20",
+    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+  },
+  "general_income.pdf": {
+    "section_id": "B3-3.1-01",
+    "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.1-01/general-income-information",
+    "version": "10/07/2026",
+    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "sha256": "fbb406522844cc12e2ceb0adee6dc060f14d1d7a95f0072cc13af5c1582f16f1",
+    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+  },
+  "variable_income.pdf": {
+    "section_id": "B3-3.3-02",
+    "source_url": "https://selling-guide.fanniemae.com/sel/b3-3.3-02/bonus-commission-overtime-and-tip-income",
+    "version": "03/04/2026",
+    "version_basis": "Official source heading verified 2026-10-17; PDF heading may be clipped",
+    "sha256": "fc1aa1d48e5f5511b7b063bfdf9e159b126edc168b832ad5a19b820d1cbe98a9",
+    "quality_warning": "Right-edge text clipped in supplied browser-print PDF. Incomplete evidence; review original source. Version is topic revision date, not guaranteed effective date."
+  }
+}

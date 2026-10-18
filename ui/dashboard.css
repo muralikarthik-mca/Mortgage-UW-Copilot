@@ -1,0 +1,37 @@
+/* Dashboard styles are scoped to Streamlit's stable keys and test attributes. */
+.stApp { background: #f5f7fb; color: #1c3048; }
+[data-testid="stHeader"] { background: #f5f7fbeb; }
+.block-container { max-width: 1450px; padding: 2.2rem 3rem 6rem; }
+[data-testid="stSidebar"] { background: #fff; border-right: 1px solid #e2e8f0; }
+[data-testid="stSidebar"] .block-container { padding: 1.8rem 1.3rem; }
+h1, h2, h3 { color: #19334f; letter-spacing: -.035em; }
+h1 { font-size: 2rem !important; font-weight: 700 !important; padding-bottom: .4rem !important; }
+h2 { font-size: 1.3rem !important; }
+h3 { font-size: 1.05rem !important; }
+.uw-brand { display: flex; align-items: center; gap: 11px; font-size: 17px; font-weight: 750; line-height: 1.3; margin-bottom: 5px; }
+.uw-brand-mark { display: grid; place-items: center; height: 39px; width: 39px; background: #173c68; color: #fff; border-radius: 11px; font-size: 22px; }
+.uw-brand-sub { color: #7b899b; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 28px 50px; }
+.uw-eyebrow { font-size: 11px; font-weight: 700; color: #7a899b; letter-spacing: .12em; text-transform: uppercase; margin: 2px 0 10px; }
+.uw-intro { color: #6b7b8f; font-size: 14px; line-height: 1.6; margin: 0 0 24px; }
+.uw-tag { display: inline-block; padding: 5px 10px; color: #725b2d; background: #fbf2dd; border: 1px solid #efe0ba; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: .05em; }
+.uw-notice-banner { color: #617189; padding: 12px 16px; font-size: 12px; background: #eaf0f8; border-radius: 9px; border: 1px solid #dfe7f0; margin-bottom: 25px; }
+[data-testid="stMetric"] { border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 2px 3px #203b5a03; }
+[data-testid="stMetricLabel"] { color: #6b7b8f; font-size: 12px; }
+[data-testid="stMetricValue"] { color: #1b3857; font-size: 1.8rem; font-weight: 650; }
+[data-testid="stVerticalBlockBorderWrapper"] > div { border-color: #e2e8f0 !important; border-radius: 12px !important; }
+.st-key-income_card, .st-key-documents_card, .st-key-findings_card, .st-key-pipeline_card { background: #fff; border-radius: 12px; }
+.stButton > button { border-radius: 8px; }
+[data-testid="stSidebar"] .stRadio label { font-size: 14px; }
+.st-key-workspace_view label { width: 100%; padding: 9px 11px; margin: 2px 0; border-radius: 8px; }
+.st-key-workspace_view label:has(input:checked) { background: #eaf1fa; color: #173c68; font-weight: 650; }
+.st-key-workspace_view label:focus-within { outline: 2px solid #5a9af0; outline-offset: 2px; }
+[data-testid="stDataFrame"] { border-radius: 8px; }
+.uw-detail { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid #edf1f6; font-size: 13px; }
+.uw-detail span:first-child { color: #718095; }
+.uw-detail strong { color: #253e58; font-weight: 600; text-align: right; }
+.uw-finding { display: flex; gap: 12px; padding: 13px 0; border-bottom: 1px solid #edf1f6; font-size: 13px; line-height: 1.6; }
+.uw-dot { width: 7px; height: 7px; margin-top: 7px; border-radius: 100%; background: #c48e35; flex-shrink: 0; }
+.uw-finding strong { color: #344d68; }
+.uw-finding p { color: #748195; font-size: 12px; margin: 3px 0 0; }
+.uw-footnote { color: #7b899a; font-size: 11px; line-height: 1.6; margin-top: 14px; }
+@media (max-width: 800px) { .block-container { padding: 1.5rem 1.1rem 6rem; } h1 { font-size: 1.65rem !important; } [data-testid="stMetric"] { padding: 14px; } }
