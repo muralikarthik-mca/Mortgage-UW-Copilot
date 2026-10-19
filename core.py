@@ -16,6 +16,7 @@ from pypdf import PdfReader
 from chunking import CHUNKING_VERSION, EXCEPTION, fixed_spans, semantic_spans
 from ranking import rank_candidates
 from corpus_scope import scope_limitation
+from vector_store import backend_name, upsert_snapshot, query_snapshot
 
 ROOT = Path(__file__).resolve().parent
 AGENCY = ROOT / 'data/guidelines/agency/fannie_mae'
@@ -195,6 +196,8 @@ def index_policies(strategy='semantic', corpus='training'):
     payload = {'schema': 2, 'embedding_model': EMBED_MODEL, 'fingerprint': _fingerprint(chunks),
                'chunking_version': CHUNKING_VERSION, 'source_signature': _source_signature(corpus),
                'indexed_at': datetime.now(timezone.utc).isoformat(), 'chunks': chunks, 'vectors': vectors.tolist()}
+    if backend_name() == 'pinecone':
+        payload['pinecone'] = upsert_snapshot(payload, corpus, strategy)
     path = _index_path(strategy, corpus)
     path.parent.mkdir(exist_ok=True)
     temporary = path.with_suffix('.tmp')
@@ -214,12 +217,16 @@ def retrieve_detailed(question, strategy='semantic', corpus='training', k=5, mod
             or payload.get('source_signature') != _source_signature(corpus)):
         raise RuntimeError('Guidelines or embedding model changed. Rebuild the selected index.')
     chunks = payload['chunks']
-    matrix = np.asarray(payload['vectors'])
     query = _embed(['search_query: ' + question])[0]
-    hits, trace = rank_candidates(question, chunks, matrix, query, mode, k)
+    backend = backend_name()
+    if backend == 'pinecone':
+        candidates = query_snapshot(payload, corpus, strategy, query, max(12, k))
+        hits, trace = rank_candidates(question, chunks, None, None, mode, k, dense_candidates=candidates)
+    else:
+        hits, trace = rank_candidates(question, chunks, np.asarray(payload['vectors']), query, mode, k)
     return {'hits': hits, 'candidate_trace': trace, 'mode': mode,
             'latency_ms': (perf_counter() - started) * 1000,
-            'index_fingerprint': payload['fingerprint']}
+            'index_fingerprint': payload['fingerprint'], 'vector_backend': backend}
 
 
 class RetrievalHits(list):
@@ -355,6 +362,7 @@ class ReviewWorkflow:
             source = f"[{label}]({p['source_url']})" if p['source_url'] else label + ' | FICTIONAL'
             lines.append(f"- {source}\n  > " + p['text'].replace('\n', '\n  > '))
         return {**state, 'facts': facts, 'policies': policies, 'draft': raw,
+            'vector_backend': backend_name(),
             'model_invoked': not bool(limitation), 'scope_limitation': limitation,
             'retrieval_trace': getattr(policies, 'trace', []),
             'retrieval_latency_ms': getattr(policies, 'latency_ms', None),

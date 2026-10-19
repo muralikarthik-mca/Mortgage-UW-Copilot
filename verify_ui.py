@@ -2,8 +2,11 @@
 import json
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
+from dotenv import load_dotenv
+from vector_store import backend_name
 
 ROOT = Path(__file__).parent
+load_dotenv(ROOT / '.env')
 
 
 def main():
@@ -78,6 +81,9 @@ def main():
         for name, title in [('Loans', 'Loan portfolio'), ('Guidelines', 'Guideline library'), ('RAG Evaluation', 'RAG evaluation')]:
             page.get_by_test_id('stSidebar').get_by_text(name, exact=True).click()
             expect(page.get_by_role('heading', name=title, exact=True).first).to_be_visible()
+            if name == 'Guidelines':
+                expected_backend = 'Pinecone' if backend_name() == 'pinecone' else 'Local NumPy'
+                expect(page.get_by_text('Vector storage: ' + expected_backend, exact=True)).to_be_visible()
         mobile = browser.new_page(viewport={'width':390,'height':844}, is_mobile=True, has_touch=True)
         mobile.goto('http://127.0.0.1:8502')
         mobile.get_by_role('button', name='Open AI underwriting assistant', exact=True).click(timeout=30000)
@@ -103,7 +109,8 @@ def main():
         report = {'desktop_width':400, 'mobile_bounds':box, 'layout_unchanged':True,
                   'open_close_escape_focus':True, 'minimize_preserves_history':True,
                   'loan_context_isolation':True, 'live_submission_and_citations':True,
-                  'loading_error_insufficient_states':True, 'navigation':True, 'browser_errors':errors}
+                  'loading_error_insufficient_states':True, 'navigation':True,
+                  'vector_backend':backend_name(), 'browser_errors':errors}
         (output/'ui-verification.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
         print(json.dumps(report,indent=2))
         browser.close()

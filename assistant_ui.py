@@ -66,6 +66,7 @@ def floating_assistant(context, record):
                     'html': answer_html(display), 'state': state,
                     'audit': {'loan_facts': result['facts'], 'retrieved_chunks': result['policies'],
                               'retrieval_mode': result.get('retrieval_mode'),
+                              'vector_backend': result.get('vector_backend'),
                               'retrieval_latency_ms': result.get('retrieval_latency_ms'),
                               'candidate_rankings': result.get('retrieval_trace', []),
                               'citation_check_passed': result['citation_check_passed']}})

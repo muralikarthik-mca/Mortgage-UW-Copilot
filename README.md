@@ -45,7 +45,7 @@ Every chunk preserves original text, section ID, page reference, character offse
 
 Refreshing requires optional browser dependencies and installed Edge. It retains originals, verifies the official topic identity, archives provenance, and refuses to update the manifest if printed body-token coverage is below 100%. Existing readable PDF revisions matched the checked online topics; the clipped employment-documentation heading cannot establish its original revision independently. Verification is a dated snapshot, not a guarantee of future currency.
 
-Ollama `nomic-embed-text` embeddings and NumPy search still use separate local JSON indexes for each corpus/strategy under `.indexes/`; no ChromaDB or new service was added. Nomic document/query task prefixes are used. Schema/chunking/source-signature validation invalidates old indexes, so rebuild after this update. The retrieval dropdown offers:
+Ollama `nomic-embed-text` creates all embeddings with document/query task prefixes. `VECTOR_BACKEND=local` uses the original NumPy search; `VECTOR_BACKEND=pinecone` uses hosted Pinecone dense search. Separate JSON snapshots under `.indexes/` retain original chunks, metadata, vectors for rollback, and active remote namespace pointers. Schema/chunking/source-signature validation rejects outdated indexes. The retrieval dropdown offers:
 
 1. **Dense vector:** cosine ranking from a dense candidate pool.
 2. **Hybrid dense + BM25:** union of independently retrieved dense and BM25 candidates, fused using reciprocal ranks. BM25 can introduce candidates outside the dense pool.
@@ -88,9 +88,35 @@ The 31 baseline tests passed before changes; the checkpoint tag is `checkpoint/p
 
 The comparison covers two chunking algorithms × three retrieval modes. It records chunk-level Precision@5, Recall@5, and measured end-to-end retrieval latency. Recall is undefined for unanswerable questions and excluded from its macro average. Answer checks measure exact-source faithfulness, citation correctness, independent evidence relevance, multi-section coverage, and abstention using `reports/evaluation_rubric.md`. Source fidelity is deliberately narrower than human semantic entailment; an irrelevant exact quote can score perfectly on fidelity while failing relevance. Eight pipeline answer cases use semantic + dense, matching the deployed default; the report distinguishes actual Ollama calls from scope-guard abstention. The original measured failures are retained in `reports/initial_rag_comparison.*`. Scope guards and a narrower ranked answer window address observed development-set failures; these are not held-out validation results.
 
-Final verification: **48 tests passed**, with desktop/mobile browser checks passing. Semantic + dense measured Precision@5 **0.207**, Recall@5 **1.000**, and median retrieval latency **125.3 ms** across 30 questions. Five answerable samples achieved support precision and required-section coverage of 1.0; three ambiguous/absent-topic samples correctly abstained. These eight answer checks do not certify unseen questions. `reports/answer_relevance_probe.json` records the five-case check performed before the final benchmark.
+The pre-Pinecone verification passed **48 tests** and desktop/mobile browser checks. Its local semantic + dense retrieval measured Precision@5 **0.207**, Recall@5 **1.000**, and median retrieval latency **125.3 ms** across 30 questions. Five answerable samples achieved support precision and required-section coverage of 1.0; three ambiguous/absent-topic samples correctly abstained. These eight answer checks do not certify unseen questions. `reports/answer_relevance_probe.json` records the five-case check performed before that benchmark. Current database measurements are identified separately below and in the comparison report.
 
 Read `reports/rag_comparison.md` for measured results and failure analysis; its companion JSON contains raw scores, candidate traces, and actual answer outputs. The evaluation dashboard loads matching measured results quickly and exposes the report, answer rubric scores, and before/after candidate ranks. Fresh benchmarks require Ollama and can take several minutes. The local JSON index is sufficient for this small corpus; no infrastructure migration is justified.
+
+## Pinecone setup
+
+Use the existing `.venv314`; `requirements.txt` includes the Pinecone SDK. Copy `.env.example` to `.env` only if `.env` is absent. Put the API key in `.env` only; never in the tracked template or source files. Configure:
+
+```dotenv
+PINECONE_API_KEY=your_private_key
+VECTOR_BACKEND=pinecone
+PINECONE_INDEX=mortgage-uw-copilot
+PINECONE_CLOUD=aws
+PINECONE_REGION=us-east-1
+PINECONE_NAMESPACE_PREFIX=mortgage-uw
+```
+
+```powershell
+.\.venv314\Scripts\python.exe -X utf8 pinecone_setup.py --migrate
+.\.venv314\Scripts\python.exe -X utf8 pinecone_setup.py --verify --activate
+```
+
+Migration reuses valid local embeddings, creates a dedicated cosine index matching their actual dimensions (768 in the measured migration), and uploads separate versioned namespaces for each corpus/strategy. Source text and lossless provenance accompany the vectors. It verifies fetch/search visibility before publishing the local namespace pointer. Failed writes preserve the previous pointer; previous namespaces are retained, not deleted. New source/model versions get new namespaces. Inspect or clean up superseded namespaces separately as the corpus grows.
+
+Restart Streamlit after changing `.env`. Guidelines shows the active vector backend. Dense candidates come from Pinecone queries; BM25, reciprocal-rank fusion, and passage reranking remain local. BM25-only candidates have no returned dense score/rank, represented as null rather than an invented score. Citation text is resolved from the matching local source snapshot, so local source files/snapshots remain required. Loan JSON is not uploaded. Pinecone receives guideline text/vectors and query embeddings; network access is required for RAG, while Ollama remains local. No automatic fallback hides Pinecone failures.
+
+Set `VECTOR_BACKEND=local` and restart to use the retained local indexes. Ordinary pytest tests force the local backend or mock the adapter; `pinecone_setup.py --verify` performs live database comparisons. `reports/pinecone_migration.json` records uploaded counts and namespaces; `reports/pinecone_verification.json` records the 15 measured local/Pinecone comparisons. `reports/pre_pinecone_rag_comparison.*` preserves pre-migration measurements, while the current comparison report explicitly identifies its backend. Run `evaluate.py --force --answers` for measurements in your environment. Keep `.env`, database caches, and credentials out of Git; `.env.example` contains blank credentials only.
+
+Pinecone verification: **58 tests passed**, with the desktop/mobile browser workflow passing against the active Pinecone app. All 15 local/Pinecone retrieval comparisons returned identical ordered top-five IDs. The complete benchmark retained its retrieval quality scores; semantic + dense measured median retrieval latency **178.4 ms**. All eight representative answer checks passed their automated rubric expectations. See `reports/pinecone_migration.md` and the raw reports for details and limits.
 
 ## Five-minute demo
 

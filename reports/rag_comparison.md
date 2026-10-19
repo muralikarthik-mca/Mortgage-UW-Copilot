@@ -1,16 +1,18 @@
 # Measured RAG comparison
 
-Measured at 2026-10-18T22:46:23.062155+00:00 UTC; 30 labeled questions.
+Measured at 2026-10-19T02:54:38.681125+00:00 UTC; 30 labeled questions.
 Models: embeddings `nomic-embed-text`; chat `gemma3:1b`.
+
+Vector backend: `pinecone`. BM25 and passage reranking run in Python.
 
 | Chunking | Retrieval | Precision@5 | Recall@5 | Median ms | P95 ms |
 |---|---|---:|---:|---:|---:|
-| fixed | dense | 0.213 | 0.908 | 182.5 | 244.1 |
-| fixed | hybrid | 0.240 | 0.965 | 155.7 | 298.0 |
-| fixed | hybrid_rerank | 0.233 | 0.963 | 142.0 | 231.5 |
-| semantic | dense | 0.207 | 1.000 | 125.3 | 167.0 |
-| semantic | hybrid | 0.200 | 0.986 | 123.2 | 153.7 |
-| semantic | hybrid_rerank | 0.173 | 0.875 | 128.8 | 159.3 |
+| fixed | dense | 0.213 | 0.908 | 184.4 | 280.7 |
+| fixed | hybrid | 0.240 | 0.965 | 188.8 | 284.6 |
+| fixed | hybrid_rerank | 0.233 | 0.963 | 190.1 | 289.2 |
+| semantic | dense | 0.207 | 1.000 | 178.4 | 349.4 |
+| semantic | hybrid | 0.200 | 0.986 | 190.5 | 225.4 |
+| semantic | hybrid_rerank | 0.173 | 0.875 | 212.3 | 308.6 |
 
 Chunk-level relevance uses section IDs and prewritten source-text anchors. Precision uses five slots; missing slots count as nonrelevant. Recall excludes no-answer cases (undefined, never scored as 1). Overlap can create multiple gold chunks, and changing chunk granularity changes the recall denominator.
 

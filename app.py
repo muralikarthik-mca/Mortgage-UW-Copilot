@@ -7,6 +7,7 @@ import streamlit as st
 
 from assistant_ui import floating_assistant
 from core import AGENCY, ROOT, evidence_review, get_loan, index_policies, loans, ollama_status
+from vector_store import backend_name
 
 st.set_page_config(page_title='Mortgage UW | Review workspace', page_icon='🏦', layout='wide', initial_sidebar_state='expanded')
 st.html('<style>' + (ROOT / 'ui/dashboard.css').read_text(encoding='utf-8') + '</style>')
@@ -101,7 +102,7 @@ if view in ('Dashboard', 'Loans'):
         st.json(record)
 elif view == 'Guidelines':
     st.title('Guideline library')
-    st.html('<p class="uw-intro">Traceable source documents, version metadata, and local retrieval indexes.</p>')
+    st.html('<p class="uw-intro">Traceable source documents, version metadata, and retrieval indexes.</p>')
     st.html('<div class="uw-notice-banner">Agency topics and fictional policies remain separate. Verified topic-body PDFs preserve notes and exceptions; original clipped PDFs remain in the audit record. Topic revisions are not policy effective dates.</div>')
     c1, c2 = st.columns([2, 1])
     with c1:
@@ -121,6 +122,7 @@ elif view == 'Guidelines':
     with c2:
         with st.container(border=True):
             st.subheader('Index management')
+            st.caption('Vector storage: ' + ('Pinecone' if backend_name() == 'pinecone' else 'Local NumPy'))
             st.caption(f'{strategy.title()} chunking · {retrieval_label}')
             if st.button('Build / rebuild guideline index', key='build_index', type='primary', width='stretch'):
                 try:

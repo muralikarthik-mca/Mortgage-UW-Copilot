@@ -12,6 +12,7 @@ import core
 from chat_service import review_request
 from evaluation_metrics import answer_rubric, relevant_ids, retrieval_metrics
 from ranking import MODES
+from vector_store import backend_name, index_name
 
 ROOT = Path(__file__).parent
 DATASET = ROOT / 'data/evaluation/questions.json'
@@ -24,10 +25,12 @@ def load_cases():
 
 
 def input_signature():
-    files = [DATASET, ROOT/'core.py', ROOT/'chunking.py', ROOT/'ranking.py', ROOT/'rag_evaluation.py', ROOT/'evaluation_metrics.py', ROOT/'chat_service.py', ROOT/'corpus_scope.py']
+    files = [DATASET, ROOT/'core.py', ROOT/'chunking.py', ROOT/'ranking.py', ROOT/'rag_evaluation.py', ROOT/'evaluation_metrics.py', ROOT/'chat_service.py', ROOT/'corpus_scope.py', ROOT/'vector_store.py']
     data = ''.join(hashlib.sha256(p.read_bytes()).hexdigest() for p in files)
     data += core._source_signature('fannie_mae') + core._source_signature('training')
-    return hashlib.sha256((data + core.EMBED_MODEL + core.CHAT_MODEL + core.BASE_URL).encode()).hexdigest()
+    store = json.dumps({'backend':backend_name(), 'index':index_name() if backend_name() == 'pinecone' else None,
+                        'namespace_prefix':__import__('os').getenv('PINECONE_NAMESPACE_PREFIX', 'mortgage-uw')})
+    return hashlib.sha256((data + core.EMBED_MODEL + core.CHAT_MODEL + core.BASE_URL + store).encode()).hexdigest()
 
 
 def cached_report():
@@ -48,6 +51,7 @@ def _write_report(report):
     REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
     lines = ['# Measured RAG comparison', '', f"Measured at {report['measured_at']} UTC; 30 labeled questions.",
         f"Models: embeddings `{core.EMBED_MODEL}`; chat `{core.CHAT_MODEL}`.", '',
+        f"Vector backend: `{report.get('vector_backend', 'local')}`. BM25 and passage reranking run in Python.", '',
         '| Chunking | Retrieval | Precision@5 | Recall@5 | Median ms | P95 ms |',
         '|---|---|---:|---:|---:|---:|']
     for r in report['summary']:
@@ -99,6 +103,7 @@ def run_evaluation(force=False, include_answers=False):
     else:
         report = {'measured_at': datetime.now(timezone.utc).isoformat(), 'input_signature': input_signature(),
                   'dataset_version': 'week2-v1', 'summary': [], 'retrieval_results': [], 'indexes': {},
+                  'vector_backend': backend_name(),
                   'model_status': core.ollama_status()}
         indexes = {}
         for strategy in ('fixed', 'semantic'):

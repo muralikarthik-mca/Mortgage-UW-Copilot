@@ -1,0 +1,38 @@
+[
+  {
+    "corpus": "training",
+    "strategy": "fixed",
+    "reused_embeddings": true,
+    "index": "mortgage-uw-copilot",
+    "namespace": "mortgage-uw-training-fixed-ce54ed86587bf900441d",
+    "dimension": 768,
+    "count": 7
+  },
+  {
+    "corpus": "fannie_mae",
+    "strategy": "fixed",
+    "reused_embeddings": true,
+    "index": "mortgage-uw-copilot",
+    "namespace": "mortgage-uw-fannie_mae-fixed-850486a07a99c88ea9c6",
+    "dimension": 768,
+    "count": 31
+  },
+  {
+    "corpus": "training",
+    "strategy": "semantic",
+    "reused_embeddings": true,
+    "index": "mortgage-uw-copilot",
+    "namespace": "mortgage-uw-training-semantic-bd9b847682e9be90a7eb",
+    "dimension": 768,
+    "count": 13
+  },
+  {
+    "corpus": "fannie_mae",
+    "strategy": "semantic",
+    "reused_embeddings": true,
+    "index": "mortgage-uw-copilot",
+    "namespace": "mortgage-uw-fannie_mae-semantic-ac909723da53e79e39e8",
+    "dimension": 768,
+    "count": 48
+  }
+]

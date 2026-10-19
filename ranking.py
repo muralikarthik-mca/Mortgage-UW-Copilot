@@ -26,13 +26,23 @@ def passage_score(question, text):
     return 0.55 * coverage + 0.30 * phrase + 0.15 * total
 
 
-def rank_candidates(question, chunks, matrix, query, mode='hybrid_rerank', k=5, pool=12):
+def rank_candidates(question, chunks, matrix, query, mode='hybrid_rerank', k=5, pool=12, dense_candidates=None):
     if mode not in MODES or k < 1:
         raise ValueError('Unsupported retrieval mode or nonpositive k')
-    dense = matrix @ query / (np.linalg.norm(matrix, axis=1) * np.linalg.norm(query))
+    if dense_candidates is None:
+        dense = matrix @ query / (np.linalg.norm(matrix, axis=1) * np.linalg.norm(query))
+        dense_order = sorted(range(len(chunks)), key=lambda i: (-float(dense[i]), chunks[i]['id']))
+    else:
+        # Real database search scores; do not recompute NumPy nearest neighbors.
+        positions = {c['id']: i for i,c in enumerate(chunks)}
+        dense = np.full(len(chunks), -np.inf)
+        for chunk_id, score in dense_candidates:
+            if chunk_id not in positions:
+                raise ValueError('Dense candidate is outside the selected source snapshot')
+            dense[positions[chunk_id]] = score
+        dense_order = sorted((positions[cid] for cid,_ in dense_candidates), key=lambda i: (-float(dense[i]), chunks[i]['id']))
     lexical = (BM25Okapi([tokens(c['title'] + ' ' + c['text']) for c in chunks]).get_scores(tokens(question))
                if mode != 'dense' else np.zeros(len(chunks)))
-    dense_order = sorted(range(len(chunks)), key=lambda i: (-float(dense[i]), chunks[i]['id']))
     lexical_order = sorted(range(len(chunks)), key=lambda i: (-float(lexical[i]), chunks[i]['id']))
     dr = {i: rank+1 for rank, i in enumerate(dense_order)}
     br = {i: rank+1 for rank, i in enumerate(lexical_order)}
@@ -52,7 +62,7 @@ def rank_candidates(question, chunks, matrix, query, mode='hybrid_rerank', k=5, 
     before_rank = {i: rank+1 for rank, i in enumerate(before)}
     final_rank = {i: rank+1 for rank, i in enumerate(after)}
     trace = [{'chunk_id': chunks[i]['id'], 'section_id': chunks[i]['section_id'],
-              'dense_score': float(dense[i]), 'dense_rank': dr[i],
+              'dense_score': float(dense[i]) if np.isfinite(dense[i]) else None, 'dense_rank': dr.get(i),
               'in_dense_pool': i in dense_ids, 'in_bm25_pool': i in bm25_ids if mode != 'dense' else False,
               'bm25_score': float(lexical[i]) if mode != 'dense' else None,
               'bm25_rank': br[i] if mode != 'dense' else None,
@@ -61,5 +71,5 @@ def rank_candidates(question, chunks, matrix, query, mode='hybrid_rerank', k=5, 
               'rank_after_rerank': final_rank[i], 'selected': final_rank[i] <= k}
              for i in before]
     by_index = {i: row for i, row in zip(before, trace)}
-    hits = [{**chunks[i], 'similarity': float(dense[i]), 'ranking': by_index[i]} for i in after[:k]]
+    hits = [{**chunks[i], 'similarity': float(dense[i]) if np.isfinite(dense[i]) else None, 'ranking': by_index[i]} for i in after[:k]]
     return hits, trace

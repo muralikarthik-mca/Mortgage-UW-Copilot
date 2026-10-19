@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-10-18T22:46:34.253574+00:00",
+  "checked_at": "2026-10-19T02:59:36.140516+00:00",
   "python": "C:\\Murali\\Projects\\mortgage-uw-copilot\\.venv314\\Scripts\\python.exe",
   "exit_code": 0,
   "counts": {
-    "passed": 48
+    "passed": 58
   },
   "command": [
     "C:\\Murali\\Projects\\mortgage-uw-copilot\\.venv314\\Scripts\\python.exe",
@@ -13,7 +13,7 @@
     "-p",
     "no:cacheprovider",
     "--basetemp",
-    "C:\\Users\\Murali\\AppData\\Local\\Temp\\mortgage-uw-checks-88a4029142464c8cb5c3570a256b23fa"
+    "C:\\Users\\Murali\\AppData\\Local\\Temp\\mortgage-uw-checks-d805825d66a84163a64e8fc6e850e3fd"
   ],
-  "output": "................................................                         [100%]\n48 passed in 8.54s\n"
+  "output": "..........................................................               [100%]\n58 passed in 5.72s\n"
 }

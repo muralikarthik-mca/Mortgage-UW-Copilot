@@ -5,3 +5,4 @@ pypdf>=6,<7
 python-dotenv>=1,<2
 rank-bm25>=0.2.2,<0.3
 pytest>=8,<10
+pinecone>=10,<11

@@ -1,0 +1,320 @@
+{
+  "measured_at": "2026-10-19T02:54:12.501746+00:00",
+  "results": [
+    {
+      "case": "A01",
+      "mode": "dense",
+      "local_ids": [
+        "f3b5628d591b6b26c505",
+        "fc5f582a42a030a6b697",
+        "7e721490badddc75fbad",
+        "b470b7daf37e53a12be2",
+        "93a77b28ec498f3ce4be"
+      ],
+      "pinecone_ids": [
+        "f3b5628d591b6b26c505",
+        "fc5f582a42a030a6b697",
+        "7e721490badddc75fbad",
+        "b470b7daf37e53a12be2",
+        "93a77b28ec498f3ce4be"
+      ],
+      "pinecone_latency_ms": 1006.3201000157278,
+      "local_latency_ms": 66.37149999733083,
+      "same_top_five": true
+    },
+    {
+      "case": "A01",
+      "mode": "hybrid",
+      "local_ids": [
+        "f3b5628d591b6b26c505",
+        "1bc0fcef72c621564042",
+        "b470b7daf37e53a12be2",
+        "39475e7fd785fb9ab6cd",
+        "fc5f582a42a030a6b697"
+      ],
+      "pinecone_ids": [
+        "f3b5628d591b6b26c505",
+        "1bc0fcef72c621564042",
+        "b470b7daf37e53a12be2",
+        "39475e7fd785fb9ab6cd",
+        "fc5f582a42a030a6b697"
+      ],
+      "pinecone_latency_ms": 164.51729999971576,
+      "local_latency_ms": 88.34360001492314,
+      "same_top_five": true
+    },
+    {
+      "case": "A01",
+      "mode": "hybrid_rerank",
+      "local_ids": [
+        "1bc0fcef72c621564042",
+        "f3b5628d591b6b26c505",
+        "2a317054a2c3d006c6c8",
+        "064a946937724cf177c1",
+        "b470b7daf37e53a12be2"
+      ],
+      "pinecone_ids": [
+        "1bc0fcef72c621564042",
+        "f3b5628d591b6b26c505",
+        "2a317054a2c3d006c6c8",
+        "064a946937724cf177c1",
+        "b470b7daf37e53a12be2"
+      ],
+      "pinecone_latency_ms": 175.06300000241026,
+      "local_latency_ms": 93.75500000896864,
+      "same_top_five": true
+    },
+    {
+      "case": "A05",
+      "mode": "dense",
+      "local_ids": [
+        "c12f3f4837e53fc906dd",
+        "c27f32e576b1e9befc91",
+        "8e95a6b9e051773b1815",
+        "11712d58467d36422966",
+        "9dfa81a5fdd41570d4a4"
+      ],
+      "pinecone_ids": [
+        "c12f3f4837e53fc906dd",
+        "c27f32e576b1e9befc91",
+        "8e95a6b9e051773b1815",
+        "11712d58467d36422966",
+        "9dfa81a5fdd41570d4a4"
+      ],
+      "pinecone_latency_ms": 168.80300000775605,
+      "local_latency_ms": 95.09419999085367,
+      "same_top_five": true
+    },
+    {
+      "case": "A05",
+      "mode": "hybrid",
+      "local_ids": [
+        "c12f3f4837e53fc906dd",
+        "c27f32e576b1e9befc91",
+        "35164cb22d809a768f24",
+        "b470b7daf37e53a12be2",
+        "8e95a6b9e051773b1815"
+      ],
+      "pinecone_ids": [
+        "c12f3f4837e53fc906dd",
+        "c27f32e576b1e9befc91",
+        "35164cb22d809a768f24",
+        "b470b7daf37e53a12be2",
+        "8e95a6b9e051773b1815"
+      ],
+      "pinecone_latency_ms": 208.5738999885507,
+      "local_latency_ms": 123.51100001251325,
+      "same_top_five": true
+    },
+    {
+      "case": "A05",
+      "mode": "hybrid_rerank",
+      "local_ids": [
+        "c12f3f4837e53fc906dd",
+        "35164cb22d809a768f24",
+        "b470b7daf37e53a12be2",
+        "f3b5628d591b6b26c505",
+        "c27f32e576b1e9befc91"
+      ],
+      "pinecone_ids": [
+        "c12f3f4837e53fc906dd",
+        "35164cb22d809a768f24",
+        "b470b7daf37e53a12be2",
+        "f3b5628d591b6b26c505",
+        "c27f32e576b1e9befc91"
+      ],
+      "pinecone_latency_ms": 293.63719999673776,
+      "local_latency_ms": 153.43000000575557,
+      "same_top_five": true
+    },
+    {
+      "case": "A08",
+      "mode": "dense",
+      "local_ids": [
+        "fc5f582a42a030a6b697",
+        "27f27b881d0b01a776f9",
+        "bc97c87fd65968568f92",
+        "7e721490badddc75fbad",
+        "c37f5a060bd8f0813691"
+      ],
+      "pinecone_ids": [
+        "fc5f582a42a030a6b697",
+        "27f27b881d0b01a776f9",
+        "bc97c87fd65968568f92",
+        "7e721490badddc75fbad",
+        "c37f5a060bd8f0813691"
+      ],
+      "pinecone_latency_ms": 208.32949999021366,
+      "local_latency_ms": 136.29940000828356,
+      "same_top_five": true
+    },
+    {
+      "case": "A08",
+      "mode": "hybrid",
+      "local_ids": [
+        "bc97c87fd65968568f92",
+        "fc5f582a42a030a6b697",
+        "27f27b881d0b01a776f9",
+        "7e721490badddc75fbad",
+        "c37f5a060bd8f0813691"
+      ],
+      "pinecone_ids": [
+        "bc97c87fd65968568f92",
+        "fc5f582a42a030a6b697",
+        "27f27b881d0b01a776f9",
+        "7e721490badddc75fbad",
+        "c37f5a060bd8f0813691"
+      ],
+      "pinecone_latency_ms": 240.76090002199635,
+      "local_latency_ms": 148.75459999893792,
+      "same_top_five": true
+    },
+    {
+      "case": "A08",
+      "mode": "hybrid_rerank",
+      "local_ids": [
+        "fc5f582a42a030a6b697",
+        "7e721490badddc75fbad",
+        "688c4976e34d09f27193",
+        "27f27b881d0b01a776f9",
+        "c37f5a060bd8f0813691"
+      ],
+      "pinecone_ids": [
+        "fc5f582a42a030a6b697",
+        "7e721490badddc75fbad",
+        "688c4976e34d09f27193",
+        "27f27b881d0b01a776f9",
+        "c37f5a060bd8f0813691"
+      ],
+      "pinecone_latency_ms": 192.4898999859579,
+      "local_latency_ms": 165.53420000127517,
+      "same_top_five": true
+    },
+    {
+      "case": "A12",
+      "mode": "dense",
+      "local_ids": [
+        "efd840b95ed64601201f",
+        "fdad8d7b8b126ff472ae",
+        "8e160e2247643efb5c5b",
+        "aa5dc0426cfc578dcacd",
+        "8e95a6b9e051773b1815"
+      ],
+      "pinecone_ids": [
+        "efd840b95ed64601201f",
+        "fdad8d7b8b126ff472ae",
+        "8e160e2247643efb5c5b",
+        "aa5dc0426cfc578dcacd",
+        "8e95a6b9e051773b1815"
+      ],
+      "pinecone_latency_ms": 184.86890001804568,
+      "local_latency_ms": 135.46889999997802,
+      "same_top_five": true
+    },
+    {
+      "case": "A12",
+      "mode": "hybrid",
+      "local_ids": [
+        "efd840b95ed64601201f",
+        "50d3799be9ef77eaac74",
+        "fdad8d7b8b126ff472ae",
+        "aa5dc0426cfc578dcacd",
+        "8e160e2247643efb5c5b"
+      ],
+      "pinecone_ids": [
+        "efd840b95ed64601201f",
+        "50d3799be9ef77eaac74",
+        "fdad8d7b8b126ff472ae",
+        "aa5dc0426cfc578dcacd",
+        "8e160e2247643efb5c5b"
+      ],
+      "pinecone_latency_ms": 232.50600000028498,
+      "local_latency_ms": 141.6633000189904,
+      "same_top_five": true
+    },
+    {
+      "case": "A12",
+      "mode": "hybrid_rerank",
+      "local_ids": [
+        "efd840b95ed64601201f",
+        "50d3799be9ef77eaac74",
+        "f4a13a9171d5c4a595c8",
+        "8e95a6b9e051773b1815",
+        "064a946937724cf177c1"
+      ],
+      "pinecone_ids": [
+        "efd840b95ed64601201f",
+        "50d3799be9ef77eaac74",
+        "f4a13a9171d5c4a595c8",
+        "8e95a6b9e051773b1815",
+        "064a946937724cf177c1"
+      ],
+      "pinecone_latency_ms": 210.74470001622103,
+      "local_latency_ms": 161.98720000102185,
+      "same_top_five": true
+    },
+    {
+      "case": "T04",
+      "mode": "dense",
+      "local_ids": [
+        "a6071dc972a4103084ed",
+        "de9b7f5fb52f5fbe13d0",
+        "4f672bad5ba22b75b8a9",
+        "d44d6e944400318faf45",
+        "bda46b830a283e0577b9"
+      ],
+      "pinecone_ids": [
+        "a6071dc972a4103084ed",
+        "de9b7f5fb52f5fbe13d0",
+        "4f672bad5ba22b75b8a9",
+        "d44d6e944400318faf45",
+        "bda46b830a283e0577b9"
+      ],
+      "pinecone_latency_ms": 217.51879999646917,
+      "local_latency_ms": 117.51219999860041,
+      "same_top_five": true
+    },
+    {
+      "case": "T04",
+      "mode": "hybrid",
+      "local_ids": [
+        "a6071dc972a4103084ed",
+        "de9b7f5fb52f5fbe13d0",
+        "4f672bad5ba22b75b8a9",
+        "bda46b830a283e0577b9",
+        "d44d6e944400318faf45"
+      ],
+      "pinecone_ids": [
+        "a6071dc972a4103084ed",
+        "de9b7f5fb52f5fbe13d0",
+        "4f672bad5ba22b75b8a9",
+        "bda46b830a283e0577b9",
+        "d44d6e944400318faf45"
+      ],
+      "pinecone_latency_ms": 246.52690000948496,
+      "local_latency_ms": 129.83010002062656,
+      "same_top_five": true
+    },
+    {
+      "case": "T04",
+      "mode": "hybrid_rerank",
+      "local_ids": [
+        "a6071dc972a4103084ed",
+        "4f672bad5ba22b75b8a9",
+        "dd1dd7051756746740a8",
+        "bda46b830a283e0577b9",
+        "5985cfb921373103de8e"
+      ],
+      "pinecone_ids": [
+        "a6071dc972a4103084ed",
+        "4f672bad5ba22b75b8a9",
+        "dd1dd7051756746740a8",
+        "bda46b830a283e0577b9",
+        "5985cfb921373103de8e"
+      ],
+      "pinecone_latency_ms": 185.9829000022728,
+      "local_latency_ms": 117.49950001831166,
+      "same_top_five": true
+    }
+  ]
+}

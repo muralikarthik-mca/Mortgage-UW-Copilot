@@ -13,5 +13,6 @@
   "live_submission_and_citations": true,
   "loading_error_insufficient_states": true,
   "navigation": true,
+  "vector_backend": "pinecone",
   "browser_errors": []
 }

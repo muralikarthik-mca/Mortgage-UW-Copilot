@@ -5,6 +5,7 @@ import json
 import re
 
 from core import build_graph, get_loan
+from vector_store import backend_name
 
 EXECUTOR = ThreadPoolExecutor(max_workers=2, thread_name_prefix='loan-review')
 
@@ -12,6 +13,7 @@ EXECUTOR = ThreadPoolExecutor(max_workers=2, thread_name_prefix='loan-review')
 def context_id(context):
     fields = {key: context[key] for key in ('loan_id', 'corpus', 'strategy', 'rerank')}
     fields['retrieval_mode'] = context.get('retrieval_mode', 'hybrid_rerank' if context['rerank'] else 'dense')
+    fields['vector_backend'] = backend_name()
     return hashlib.sha256(json.dumps(fields, sort_keys=True).encode()).hexdigest()[:24]
 
 
